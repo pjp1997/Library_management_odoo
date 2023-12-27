@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+        <record id="sequence_sales_order_number" model="ir.sequence">
+            <field name="name">Sequence Sales order Number</field>
+            <field name="code">library_sales_order_number</field>
+            <field name="prefix">S</field>
+            <field eval="1" name="number_next"/>
+            <field eval="1" name="number_increment"/>
+            <field eval="False" name="company_id"/>
+            <field eval="5" name="padding"/>
+        </record>
+    </data>
+</odoo>

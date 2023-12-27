@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- library.book Form view  -->
+
+        <record id="model_books_view_form" model="ir.ui.view">
+            <field name="name">model_books.view.form</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <sheet>
+                        <center>
+                            <h1>Books Information</h1>
+                        </center>
+                        <field name="image" widget="image" class="oe_avatar" nolabel="1"/>
+                        <group>
+                            <field name="title"></field>
+                            <field name="author"></field>
+                            <field name="book_pdf" />
+                            <field name="isbn" force_save="1"></field>
+                            <field name="genre"></field>
+                            <field name="publication_year"></field>
+                            <field name="available_copies"></field>
+                            <field name="total_copies"></field>
+                            <field name="total_amount" />   
+                        </group>
+                    </sheet>
+                </form>
+            </field>
+        </record>
+
+        <!-- library.book Tree view  -->
+
+        <record id="model_name_view_tree" model="ir.ui.view">
+            <field name="name">model_books.view.tree</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <tree string="">
+                    <field name="image" widget="image" class="oe_avatar"/>
+                    <field name="title"></field>
+                    <field name="author"></field>
+                    <field name="isbn"></field>
+                    <field name="genre"></field>
+                    <field name="publication_year" optional='hide'></field>
+                    <field name="available_copies" optional='show'></field>
+                    <field name="total_copies"></field>
+                </tree>
+            </field>
+        </record>
+
+        <!-- library.book Kanban view  -->
+
+        <record id="model_name_view_kanban" model="ir.ui.view">
+            <field name="name">books.view.kanban</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <kanban>
+                    <field name="id"></field>
+                    <templates>
+                        <t t-name="kanban-box">
+                            <div class="oe_kanban_global_click" style="height:135px;">
+                                <div style="width:30%; float:left;display:inline-block;">
+                                    <img alt="Avatar" t-att-src="kanban_image('library.book','image',record.id.raw_value)" style="width:100px;height:120px;"/>
+                                    <!-- <field name="image" widget="image" class="oe_avatar" /> -->
+                                </div>
+
+                                <div style="width:60%;float:right;display:inline-block;">
+                                    <strong style="font-weight:bold;">
+                                        Title : </strong>
+                                    <field name="title"></field>
+                                    <br/>
+                                    <strong style="font-weight:bold;">
+                                      Author : </strong>
+                                    <field name="author"></field>
+                                    <br/>
+                                    <strong style="font-weight:bold;">
+                                       Genre : </strong>
+                                    <field name="genre"></field>
+                                    <br/>
+                                    <strong style="font-weight:bold;">
+                                        Publication Year : </strong>
+                                    <field name="publication_year"></field>
+                                </div>
+                            </div>
+                        </t>
+                    </templates>
+                </kanban>
+            </field>
+        </record>
+
+        <!-- library.book Search view  -->
+
+        <record id="book_view_search" model="ir.ui.view">
+            <field name="name">books.view.search</field>
+            <field name="model">library.book</field>
+            <field name="arch" type="xml">
+                <search string="Books Search View">
+                    <field name="title"/>
+                    <field name="author"/>
+                    <field name="isbn"/>
+                    <field name="genre" filter_domain="['|',('author', 'ilike', self),('genre','ilike',self)]"/>
+                    <separator/>
+                    <filter name="title" string="Title" domain="[('title', '=', 'Python')]"/>
+                    <filter name="Publication_year" string="Publication Year Greater Than 2000" domain="[('publication_year', '>', '2000')]"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter name="author" string="Author" context="{'group_by': 'author'}" />
+                    </group>
+                    <!-- <group expand="0" string="Group By">
+                        <filter string="Genre" name="genre" context="{'group_by': genre}"/>
+                    </group> -->
+                </search>
+            </field>
+        </record>
+
+
+
+
+
+
+        <record id="model_books_action" model="ir.actions.act_window">
+            <field name="name">Library Book</field>
+            <field name="res_model">library.book</field>
+            <field name="view_mode">kanban,tree,form,search</field>
+            <!-- <field name="domain">[('genre','=','Computer')]</field> -->
+        </record>
+
+        <menuitem id="model_books_menu" name="Books" action="model_books_action" parent="my_main_menu" sequence="2"/>
+
+    </data>
+
+</odoo>

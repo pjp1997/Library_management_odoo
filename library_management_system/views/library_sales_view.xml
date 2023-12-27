@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data>
+
+        <!-- library.sales Form view  -->
+
+        <record id="sales_view_form" model="ir.ui.view">
+            <field name="name">sales.view.form</field>
+            <field name="model">library.sales</field>
+            <field name="arch" type="xml">
+                <form string="">
+                    <header>
+                        <field name="status" widget="statusbar" />
+                        <button name="button_done" string="Confirm" class="oe_highlight" type="object" attrs="{'invisible': [('status', '!=', 'draft')]}"/>
+                        <button name="button_paid" string="Paid" class="oe_highlight" type="object" attrs="{'invisible': [('status', '!=', 'confirm')]}"/>
+                        <!-- <button name="search_button" string="Search Button" class="oe_highlight" type="object" />
+                        <button name="search_counter_button" string="Search Counter Button" class="oe_highlight" type="object" />
+                        <button name="search_browse_botton" string="Search Browse Button" class="oe_highlight" type="object" />
+                        <button name="copy_botton" string="Copy Button" class="oe_highlight" type="object" />
+                        <button name="unlink_botton" string="Unlink Button" class="oe_highlight" type="object" /> -->
+                        <button name="action_draft" string="return to draft" class="oe_highlight" type="object" />
+
+                    </header>
+                    <sheet>
+                        <widget name="web_ribbon" title="Paid" bg_color="bg-success" attrs="{'invisible': [('status', '!=', 'paid')]}" />
+                        <group>
+                            <field name="sale_order_number" nolabel="1" style="font-size:30px;"></field>
+                            <group>
+                                <field name="transaction_id" force_save="1"/>
+                                <field name="member_id" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="book_id" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="books_quantity" attrs="{'readonly': [('status', '==', 'paid')]}" />
+                                <field name="transaction_type" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="transaction_date" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                            </group>
+                            <group>
+                                <!-- <field name="due_date" attrs="{'readonly': [('status', '==', 'paid')]}"/> -->
+                                <field name="return_date" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="total_amount" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="genre_id" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <field name="member_mail" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                <!-- <field name="partner_id"/> -->
+                            </group>
+                        </group>
+                        <notebook>
+                            <page string="Address">
+                                <group>
+                                    <field name="member_address" attrs="{'readonly': [('status', '==', 'paid')]}" />
+
+                                    <CONTENT/>
+                                </group>
+                            </page>
+                            <page string="Book Name">
+                                <group>
+                                    <field name="book_id" attrs="{'readonly': [('status', '==', 'paid')]}"/>
+                                    <field name="sale_ids">
+                                        <tree>
+                                            <field name="title"/>
+                                            <field name="author"/>
+                                            <field name="genre" />
+                                            <field name="available_copies"></field>
+                                            <field name="total_copies"></field>
+                                        </tree>
+                                    </field>
+                                    <CONTENT/>
+                                </group>
+                            </page>
+                        </notebook>
+                    </sheet>
+                    <div class="oe_chatter">
+                        <field name="message_follower_ids"/>
+                        <field name="activity_ids"/>
+                        <field name="message_ids"/>
+                    </div>
+                </form>
+            </field>
+        </record>
+
+        <!-- library.sales Tree view  -->
+        <record id="sales_view_tree" model="ir.ui.view">
+            <field name="name">sales.view.tree</field>
+            <field name="model">library.sales</field>
+            <field name="arch" type="xml">
+                <tree string="Sales Records">
+                    <field name="sale_order_number"></field>
+                    <field name="member_id"/>
+                    <field name="book_id"/>
+                    <field name="books_quantity" />
+                    <field name="transaction_type"/>
+                    <field name="transaction_date"/>
+                    <field name="return_date" />
+                    <field name="payment_status"/>
+                    <field name="total_amount"/>
+                    <!-- <field name="member_address"/> -->
+                    <!-- Add more fields as needed -->
+                </tree>
+            </field>
+        </record>
+
+
+
+        <!-- library.sales Search view  -->
+
+        <record id="sales_view_search" model="ir.ui.view">
+            <field name="name">sales.view.search</field>
+            <field name="model">library.sales</field>
+            <field name="arch" type="xml">
+                <search string="Sales Search View">
+                    <field name="transaction_id"/>
+                    <field name="member_id"/>
+                    <field name="book_id"/>
+                    <!-- <field name="transaction_date" filter_domain="['|',('transaction_date', 'ilike', self),('due_date','ilike',self)]"/> -->
+                    <separator/>
+                    <filter name="member" string="Member" domain="[('member_id', '=', 'Haris')]"/>
+                    <filter name="Total_amount" string="Total Amount Greater Than 150" domain="[('total_amount', '>', '200')]"/>
+                    <separator/>
+                    <group string="Group By">
+                        <filter name="total amount" string="Total Amount" context="{'group_by': 'total_amount'}" />
+                        <filter name="Book id" string="Book Id" context="{'group_by': 'book_id'}" />
+                    </group>
+                </search>
+            </field>
+        </record>
+
+
+
+
+        <!-- library.sales Pivot view  -->
+
+        <record id="sales_view_pivot" model="ir.ui.view">
+            <field name="name">sales.view.pivot</field>
+            <field name="model">library.sales</field>
+            <field name="arch" type="xml">
+                <pivot string="Sales Pivot View">
+
+                    <field name="total_amount"/>
+
+
+                </pivot>
+            </field>
+        </record>
+
+        <record id="sales_action" model="ir.actions.act_window">
+            <field name="name">Library Sales</field>
+            <field name="res_model">library.sales</field>
+            <field name="view_mode">tree,form,pivot</field>
+            <field name="context">{'default_books_quantity':1}</field>
+        </record>
+
+        <menuitem id="sales_menu" name="sales" action="sales_action" parent="my_main_menu" sequence="3"/>
+
+
+    </data>
+
+
+
+</odoo>

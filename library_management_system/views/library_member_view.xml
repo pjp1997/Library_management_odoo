@@ -1,0 +1,149 @@
+<odoo>
+	<data>
+
+		<!-- library.member form view  -->
+
+
+		<record id="model_member_view_form" model="ir.ui.view">
+			<field name="name">model_member.view.form</field>
+			<field name="model">library.member</field>
+			<field name="arch" type="xml">
+				<form string="Library Management">
+					<header>
+						<field name="membership_type" widget="statusbar"/>
+					</header>
+					<sheet>
+						<center>
+							<h1>
+								Member Information
+							</h1>
+						</center>
+						<field name="image" widget="image" class="oe_avatar" nolabel="1"/>
+						<group>
+							<!-- Personal Information -->
+							<group string="Personal Information">
+								<field name="name" placeholder="Enter Your Name" />
+								<field name="Date_of_birth"></field>
+								<field name="age" required="1" />
+							</group>
+							<!-- Contact Information -->
+							<group string="Contact Information">
+								<field name="e_mail" />
+								<label for="street" string="Address" />
+								<div >
+									<div class="o_address_format" name="div_address">
+										<field name="street" placeholder="Street..." class="o_address_street"/>
+										<field name="street2" placeholder="Street 2..." class="o_address_street"/>
+										<field name="city" placeholder="City" class="o_address_city"/>
+										<field name="state_id" class="o_address_state" placeholder="State" options="{'no_open': True, 'no_quick_create': True}" context="{'country_id': country_id, 'default_country_id': country_id, 'zip': zip}"/>
+										<field name="zip" placeholder="ZIP" class="o_address_zip"/>
+										<field name="country_id" placeholder="Country" class="o_address_country" options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+									</div>
+								</div>
+							</group>
+							<!-- Additional Information -->
+							<group string="Additional Information">
+								<field name="gender" widget="radio" />
+								<field name="membership_type" />
+								<field name="joining_date" />
+								<!-- <field name="sales_order"/> -->
+							</group>
+						</group>
+						<notebook>
+							<page name="book_history" string="Book History">
+								<field name="sales_order" nolabel="1">
+									<!-- create="false" edit="false" delete="false" editable="bottom" default_order="date,name desc"  -->
+									<tree string="Book History" editable="bottom" delete="false">
+										<field name="transaction_id"/>
+										<field name="member_id"/>
+										<field name="book_id"/>
+										<field name="transaction_type"/>
+										<field name="transaction_date"/>
+										<!-- <field name="due_date"/> -->
+										<field name="return_date"/>
+										<field name="total_amount"/>
+									</tree>
+								</field>
+							</page>
+						</notebook>
+					</sheet>
+				</form>
+			</field>
+		</record>
+
+
+		<!-- library.member Tree view  -->
+
+		<record id="model_member_view_tree" model="ir.ui.view">
+			<field name="name">model_member.view.tree</field>
+			<field name="model">library.member</field>
+			<field name="arch" type="xml">
+				<tree string="" decoration-info="membership_type == 'student'" decoration-danger="membership_type == 'faculty'">
+					<field name="image" widget="image" class="oe_avatar" />
+					<field name="name"/>
+					<field name="Date_of_birth"></field>
+					<field name="age"/>
+					<field name="mobile_number"/>
+					<field name="e_mail"/>
+					<field name="street"/>
+					<field name="gender" widget="radio" />
+					<field name="membership_type"/>
+					<field name="joining_date"/>
+				</tree>
+			</field>
+		</record>
+
+
+		<!-- library.member Kanban view  -->
+
+		<record id="member_view_kanban" model="ir.ui.view">
+			<field name="name">members.view.kanban</field>
+			<field name="model">library.member</field>
+			<field name="arch" type="xml">
+				<kanban>
+					<field name="id"></field>
+					<templates>
+						<t t-name="kanban-box">
+							<div class="oe_kanban_global_click" style="height:135px;">
+								<div style="width:30%; float:left;display:inline-block;">
+									<img alt="Avatar" t-att-src="kanban_image('library.member','image',record.id.raw_value)" style="width:100px;height:120px;"/>
+
+									<!-- <field name="image" widget="image" class="oe_avatar" /> -->
+								</div>
+								<div style="width:55%;float:right;display:inline-block;">
+									<strong style="font-weight: bold;">
+									Name : 
+									</strong>
+									<field name="name"/>
+									<br/>
+									<strong style="font-weight: bold;">
+									Age : 
+									</strong>
+									<field name="age"/>
+									<br/>
+									<strong style="font-weight: bold;">
+									Mobile No. :
+									</strong>
+									<field name="mobile_number"/>
+								</div>
+							</div>
+						</t>
+					</templates>
+				</kanban>
+			</field>
+		</record>
+
+
+
+
+
+
+		<record id="model_member_action" model="ir.actions.act_window">
+			<field name="name">Library Member</field>
+			<field name="res_model">library.member</field>
+			<field name="view_mode">kanban,form,tree</field>
+		</record>
+		<menuitem id="my_main_menu" name="Library Management System" />
+		<menuitem id="model_member_menu" name="Member" action="model_member_action" parent="my_main_menu" sequence="1" />
+	</data>
+</odoo>
